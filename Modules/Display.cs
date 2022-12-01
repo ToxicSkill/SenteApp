@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace SenteApp.Services
+namespace SenteApp.Modules
 {
-    public class DisplayService
+    public class Display
     {
         private const string Separator = " ";
 
-        public void Display(Dictionary<int, Participant> participants)
+        public void Show(Dictionary<int, Participant> participants)
         {
             foreach (var item in participants)
             {

@@ -2,28 +2,34 @@
 using SenteApp.Models;
 using SenteApp.Processing;
 using SenteApp.Readers;
-using SenteApp.Services;
-using System;
+using System.IO;
+using System.Reflection;
 
 namespace SenteApp
 {
     internal class Program
     {
+        private static readonly string StructureFilePath = "Files\\struktura.xml";
+
+        private static readonly string TransferFilePath = "Files\\przelewy.xml";
+
         static void Main(string[] args)
         {
-            var structurePath = "E:\\Code\\C#\\SenteApp\\TestFiles\\struktura.xml";
-            var transfersPath = "E:\\Code\\C#\\SenteApp\\TestFiles\\przelewy.xml";
+            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var structurePath = Path.Combine(basePath, StructureFilePath);
+            var transfersPath = Path.Combine(basePath, TransferFilePath);
+
             IXmlReader<Structure> xmlStrucutreReader = new XmlReader<Structure>();
             IXmlReader<Transfers> xmlTransfersReader = new XmlReader<Transfers>();
+
             var structureResult = xmlStrucutreReader.ReadXml(structurePath);
             var transfersResult = xmlTransfersReader.ReadXml(transfersPath);
-            Console.WriteLine(structureResult);
-            Console.WriteLine(transfersResult);
 
-            var provisionService = new ProvisionService();
-            var displayService = new DisplayService();
-            var result = provisionService.Calculate(structureResult, transfersResult);
-            displayService.Display(result);
+            IProvisionService provisionService = new ProvisionService();
+
+            provisionService.Calculate(structureResult, transfersResult);
+            provisionService.Display();
         }
     }
 }

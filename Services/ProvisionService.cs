@@ -1,29 +1,44 @@
-﻿using SenteApp.Models;
+﻿using SenteApp.Interfaces;
+using SenteApp.Models;
+using SenteApp.Modules;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SenteApp.Processing
 {
-    public class ProvisionService
+    public class ProvisionService : IProvisionService
     {
         private Dictionary<int, Participant> _participantdDictionary;
 
+        private readonly Display _display;
+
         public ProvisionService()
         {
+            _display = new Display();
             _participantdDictionary = new Dictionary<int, Participant>();
         }
 
-        public Dictionary<int, Participant> Calculate(Structure structure, Transfers transfers)
+        public void Calculate(Structure structure, Transfers transfers)
         {
             if (transfers == null || structure == null)
             {
-                return default;
+                return;
             }
 
             structure.Participant.NotLinkedSubordinates = GetNumberOfNotLinkedSubordinates(structure.Participant);
             _participantdDictionary.Add(structure.Participant.Id, structure.Participant);
             FillSupervisors(structure.Participant, 0);
             ApplyTransfers(transfers);
+        }
+
+        public Dictionary<int, Participant> GetParticipants()
+        {
             return _participantdDictionary;
+        }
+
+        public void Display()
+        {
+            _display.Show(_participantdDictionary);
         }
 
         private void ApplyTransfers(Transfers transfers)
@@ -48,7 +63,7 @@ namespace SenteApp.Processing
             {
                 if (participant.Supervisor.Supervisor != null)
                 {
-                    initialAmount /= 2;
+                    initialAmount /= 2; // floor by default (for positive)
                 }
                 participant.Supervisor.Money += initialAmount;
                 participant = participant.Supervisor;
@@ -57,19 +72,10 @@ namespace SenteApp.Processing
 
         private int GetNumberOfNotLinkedSubordinates(Participant participant)
         {
-            var number = 0;
-            if (participant.Subordinates == null)
-            {
-                return number;
-            }
-            foreach (var subordinate in participant.Subordinates)
-            {
-                if (subordinate.Subordinates == null)
-                {
-                    number++;
-                }
-            }
-            return number;
+            if (participant.Subordinates == null) return 0;
+            return (from subordinate in participant.Subordinates
+                    where subordinate.Subordinates == null
+                    select subordinate).Count();
         }
 
         private void FillSupervisors(Participant participant, int depth)
