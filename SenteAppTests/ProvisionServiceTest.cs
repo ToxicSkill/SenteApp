@@ -192,7 +192,7 @@ namespace SenteAppTests
                     new Transfer()
                     {
                         From = 6,
-                        Amount = 200
+                        Amount = 199
                     },
                     new Transfer()
                     {
@@ -210,11 +210,11 @@ namespace SenteAppTests
             _provisionService.Calculate(structure, transfers);
             var result = _provisionService.GetParticipants();
 
-            var expectedId1Money = 1000;
+            var expectedId1Money = 999;
             var expectedId2Money = 0;
             var expectedId3Money = 40;
             var expectedId4Money = 0;
-            var expectedId5Money = 185;
+            var expectedId5Money = 184;
             var expectedId6Money = 0;
             var expectedId7Money = 25;
 
