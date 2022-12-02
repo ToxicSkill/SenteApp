@@ -96,8 +96,6 @@ namespace SenteApp.Processing
             }
 
             participant.NotLinkedSubordinates += numberOfNotLinkedSubordinates;
-
-            return;
         }
     }
 }
