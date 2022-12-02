@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestFiles\przelewy.xml" />
-    <None Remove="TestFiles\struktura.xml" />
+    <None Remove="Files\przelewy.xml" />
+    <None Remove="Files\struktura.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TestFiles\przelewy.xml">
+    <Content Include="Files\przelewy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestFiles\struktura.xml">
+    <Content Include="Files\struktura.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
